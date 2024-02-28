@@ -11,7 +11,7 @@ const stateKey = 'spotify_auth_state';
 
 /**
  * Route Handler: /
- * Home page sample text
+ * Home page - sample text
  */
 app.get('/', (req, res) => {
     const data = {
@@ -59,7 +59,8 @@ app.get('/login', (req, res) => {
 
 /**
  * Route Handler: /callback
- * Sends a POST request to the Spotify Accounts Service /api/token endpoint to exchange the authorization code for an access token
+ * Sends a POST request to the Spotify Accounts Service /api/token endpoint to exchange the authorization code for an 
+ * access token and refresh token before redirecting the user to the application
  */
 app.get('/callback', (req, res) => {
     const code = req.query.code || null;
@@ -79,20 +80,16 @@ app.get('/callback', (req, res) => {
     })
     .then(response => {
         if (response.status === 200) {
-            const { access_token, token_type } = response.data;
-            axios.get('https://api.spotify.com/v1/me', {
-                headers: {
-                    Authorization: `${token_type} ${access_token}`
-                }
-            })
-            .then(response => {
-                res.send(`<pre>${JSON.stringify(response.data, null, 2)}</pre>`);
-            })
-            .catch(error => {
-                res.send(error);
+            const { access_token, refresh_token } = response.data;
+            const queryParams = querystring.stringify({
+                access_token,
+                refresh_token
             });
+            // redirect to react app
+            res.redirect(`http://localhost:3000/?${queryParams}`);
+            // pass along tokens in query params
         } else {
-            res.send(response);
+            res.redirect(`/?${querystring.stringify({ error: 'invalid_token' })}`);
         }
     })
     .catch(error => {
@@ -102,7 +99,7 @@ app.get('/callback', (req, res) => {
 
 /**
  * Route Handler: /refresh_token
- * Sends a POST request to the Spotify Accounts Service /api/token endpoint to exchange a refresh token for an access token
+ * Sends a POST request to the Spotify Accounts Service /api/token endpoint to request a new refresh token
  */
 app.get('/refresh_token', (req, res) => {
     const {refresh_token}  = req.query;
