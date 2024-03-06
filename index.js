@@ -80,14 +80,14 @@ app.get('/callback', (req, res) => {
     })
     .then(response => {
         if (response.status === 200) {
-            const { access_token, refresh_token } = response.data;
+            const { access_token, refresh_token, expires_in } = response.data;
             const queryParams = querystring.stringify({
                 access_token,
-                refresh_token
+                refresh_token,
+                expires_in
             });
             // redirect to react app
             res.redirect(`http://localhost:3000/?${queryParams}`);
-            // pass along tokens in query params
         } else {
             res.redirect(`/?${querystring.stringify({ error: 'invalid_token' })}`);
         }
@@ -99,7 +99,7 @@ app.get('/callback', (req, res) => {
 
 /**
  * Route Handler: /refresh_token
- * Sends a POST request to the Spotify Accounts Service /api/token endpoint to request a new refresh token
+ * Sends a POST request to the Spotify Accounts Service /api/token endpoint to request a new access token
  */
 app.get('/refresh_token', (req, res) => {
     const {refresh_token}  = req.query;
