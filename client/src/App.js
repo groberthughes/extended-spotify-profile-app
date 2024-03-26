@@ -8,7 +8,7 @@ import {
 import { accessToken, logout, getCurrentUserProfile } from './spotify';
 import { catchErrors } from './utils';
 import { GlobalStyle } from './styles';
-import { Login, Profile } from './pages';
+import { Login, Profile, TopArtists, TopTracks, Playlists, Playlist } from './pages';
 import styled from 'styled-components';
 
 const StyledLogoutButton = styled.button`
@@ -62,10 +62,10 @@ function App() {
                         <Router>
                             <ScrollToTop />
                             <Routes>
-                                <Route path="/top-artists" element={<h1>Top Artists</h1>} />
-                                <Route path="/top-tracks" element={<h1>Top Tracks</h1>} />
-                                <Route path="/playlists" element={<h1>Playlists</h1>} />
-                                <Route path="/playlists/:id" element={<h1>Playlist</h1>} />
+                                <Route path="/top-artists" element={<TopArtists />} />
+                                <Route path="/top-tracks" element={<TopTracks />} />
+                                <Route path="/playlists" element={<Playlists />} />
+                                <Route path="/playlists/:id" element={<Playlist />} />
                                 <Route path="/" element={<Profile />} />
                             </Routes>
                         </Router>
