@@ -1,7 +1,7 @@
 # Spotify Connected App
 
 Web application used to visualize personalized Spotify data.
-Includes:
+App features include:
  - Top Artists & Top Songs with multiple time filters
  - Public Album listing and sorting by: Danceability, Tempo, and Energy
 
